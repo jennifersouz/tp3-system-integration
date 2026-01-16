@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: tp3
+      POSTGRES_PASSWORD: tp3
+      POSTGRES_DB: tp3db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  xml-service:
+    build: ./xml-service
+    env_file: .env
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: tp3
+      DB_PASSWORD: tp3
+      DB_NAME: tp3db
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+
+  external-api:
+    build: ./external-api
+    ports:
+      - "8090:8090"
+
+  processor:
+    build: ./processor
+    env_file: .env
+    environment:
+      PORT: "8080"
+      POLL_SECONDS: "15"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - xml-service
+      - external-api
+
+  crawler:
+    build: ./crawler-python
+    env_file: .env
+    environment:
+      CRAWLER_PERIOD_SECONDS: "30"
+    depends_on:
+      - processor
+
+  bi-service:
+    build: ./bi-service-node
+    environment:
+      XML_SERVICE_BASE: http://xml-service:8081
+    ports:
+      - "8082:8082"
+    depends_on:
+      - xml-service
