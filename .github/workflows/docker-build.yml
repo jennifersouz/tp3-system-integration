@@ -59,7 +59,7 @@ jobs:
       - name: Build and push crawler
         uses: docker/build-push-action@v5
         with:
-          context: ./crawler-python
+          context: ./crawler
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/tp3-crawler:${{ steps.meta.outputs.version }}
@@ -77,7 +77,7 @@ jobs:
       - name: Build and push bi-service
         uses: docker/build-push-action@v5
         with:
-          context: ./bi-service-node
+          context: ./bi-service
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/tp3-bi-service:${{ steps.meta.outputs.version }}
