@@ -20,15 +20,17 @@ services:
       DB_PASSWORD: tp3
       DB_NAME: tp3db
     ports:
-      - "8081:8081"
-      - "9090:9090"
+      - "8081:8081"    # REST API
+      - "50051:50051"  # gRPC IngestService
+      - "50052:50052"  # gRPC QueryService
     depends_on:
       - db
 
   external-api:
     build: ./external-api
     ports:
-      - "8090:8090"
+      - "8090:8090"    # REST API
+      - "8091:8091"    # XML-RPC
 
   processor:
     build: ./processor
@@ -43,7 +45,7 @@ services:
       - external-api
 
   crawler:
-    build: ./crawler-python
+    build: ./crawler
     env_file: .env
     environment:
       CRAWLER_PERIOD_SECONDS: "30"
@@ -51,10 +53,21 @@ services:
       - processor
 
   bi-service:
-    build: ./bi-service-node
+    build: ./bi-service
     environment:
       XML_SERVICE_BASE: http://xml-service:8081
     ports:
       - "8082:8082"
     depends_on:
       - xml-service
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
