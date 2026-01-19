@@ -588,6 +588,6 @@ func main() {
 		})
 	})
 
-	log.Println("xml-service up on :8081")
+	log.Println("xml-service up on :8081 (REST)")
 	log.Fatal(http.ListenAndServe(":8081", mux))
 }
