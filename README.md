@@ -77,9 +77,9 @@ docker compose up -d
 ├── xml-service/      # Go - Serviço XML/gRPC
 ├── bi-service/       # Node.js - GraphQL
 ├── external-api/     # Python - XML-RPC
+```
 
 ![Arquitetura do Sistema](./docs/tp3.jpg)
-```
 
 ### 2.2 Componentes
 
