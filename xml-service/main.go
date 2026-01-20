@@ -16,6 +16,7 @@ import (
 	"time"
 
 	_ "github.com/lib/pq"
+	//pb "xmlservice/pb"
 )
 
 /*
@@ -66,7 +67,6 @@ type Cliente struct {
 	Local    Localizacao `xml:"Localizacao"`
 }
 
-// ✅ NOVO: Imposto no XML
 type Imposto struct {
 	Taxa float64 `xml:"Taxa"`
 }
@@ -250,7 +250,6 @@ func buildColumnIndexMap(header []string) (requiredColumns, error) {
 	}, nil
 }
 
-// ✅ ALTERADO: recebe taxRate opcional e grava no XML em Localizacao.Imposto
 func parseOrdersFromCSV(r io.Reader, taxRate *float64) ([]Encomenda, error) {
 	cr := csv.NewReader(r)
 	cr.FieldsPerRecord = -1
@@ -407,7 +406,6 @@ func main() {
 			return
 		}
 
-		// ✅ NOVO: taxRate opcional
 		var taxRate *float64
 		taxRateStr := strings.TrimSpace(r.FormValue("taxRate"))
 		if taxRateStr != "" {
@@ -456,7 +454,6 @@ func main() {
 	})
 
 	// ---------------- XPath queries (no Postgres) ----------------
-
 	mux.HandleFunc("/query/vendas-por-categoria", func(w http.ResponseWriter, r *http.Request) {
 		categoria := strings.TrimSpace(r.URL.Query().Get("categoria"))
 		if categoria == "" {
@@ -588,6 +585,19 @@ func main() {
 		})
 	})
 
-	log.Println("xml-service up on :8081 (REST)")
+	go func() {
+		if err := startGRPC(db); err != nil {
+			log.Fatalf("gRPC error: %v", err)
+		}
+	}()
+
+	go func() {
+		if err := startXMLRPC(db); err != nil {
+			log.Fatalf("XML-RPC error: %v", err)
+		}
+	}()
+
+
+	log.Println("xml-service up on :8081")
 	log.Fatal(http.ListenAndServe(":8081", mux))
 }

@@ -4,7 +4,6 @@ import threading
 
 app = Flask(__name__)
 
-# Mock simples (mais que suficiente para o TP)
 STATE_TAX = {
     "Kentucky": 0.07,
     "California": 0.085,
@@ -45,9 +44,7 @@ def start_xml_rpc_server():
     server.serve_forever()
 
 if __name__ == "__main__":
-    # Start XML-RPC server in background thread
     rpc_thread = threading.Thread(target=start_xml_rpc_server, daemon=True)
     rpc_thread.start()
     
-    # Start Flask REST API
     app.run(host="0.0.0.0", port=8090)

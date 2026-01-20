@@ -26,7 +26,6 @@ PERIOD_SECONDS = int(os.getenv("CRAWLER_PERIOD_SECONDS", "30"))
 
 
 def make_s3_client():
-    # Supabase S3 normalmente exige path-style
     return boto3.client(
         "s3",
         endpoint_url=S3_ENDPOINT,
@@ -38,7 +37,7 @@ def make_s3_client():
 
 
 def generate_csv_bytes() -> bytes:
-    # Gera um CSV compatível com o teu schema (Superstore-like)
+    
     header = [
         "Row ID","Order ID","Order Date","Ship Date","Ship Mode","Customer ID","Customer Name","Segment",
         "Country","City","State","Postal Code","Region","Retail Sales People","Product ID","Category",

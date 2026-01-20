@@ -55,7 +55,7 @@ function detectStateFromCsv(csvText: string): string {
   if (stateIdx < 0) return "Kentucky";
 
   const firstData = lines[1].split(",");
-  return (firstData[stateIdx] ?? "Kentucky").replaceAll('"', "").trim() || "Kentucky";
+  return (firstData[stateIdx] ?? "Kentucky").split('"').join("").trim() || "Kentucky";
 }
 
 async function sendToXmlService(csvBytes: Buffer) {
