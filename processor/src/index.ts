@@ -95,24 +95,24 @@ async function pollOnce() {
     .sort((a, b) => (a.LastModified?.getTime() ?? 0) - (b.LastModified?.getTime() ?? 0));
 
   if (objects.length === 0) {
-    console.log("[processor] no new CSVs");
+    console.log("[processor] nenhum CSV novo encontrado");
     return;
   }
 
   const key = objects[0].Key!;
-  console.log(`[processor] processing: ${key}`);
+  console.log(`[processor] processando: ${key}`);
 
   const get = await s3.send(new GetObjectCommand({ Bucket: S3_BUCKET, Key: key }));
   const csvBytes = await streamToBuffer(get.Body);
 
   const result = await sendToXmlService(csvBytes);
-  console.log("[processor] xml-service result:", result);
+  console.log("[processor] resultado do xml-service:", result);
 
   if (result.status >= 200 && result.status < 300) {
     await s3.send(new DeleteObjectCommand({ Bucket: S3_BUCKET, Key: key }));
-    console.log(`[processor] deleted source CSV: ${key}`);
+    console.log(`[processor] CSV de origem removido: ${key}`);
   } else {
-    console.log(`[processor] NOT deleting ${key} (xml-service status ${result.status})`);
+    console.log(`[processor] nao removido ${key} (status do xml-service ${result.status})`);
   }
 }
 
@@ -134,10 +134,10 @@ app.post("/poll-now", async (_req: Request, res: Response) => {
 
 const port = Number(process.env.PORT ?? 8080);
 app.listen(port, () => {
-  console.log(`processor up on :${port}`);
+  console.log(`processor iniciado na porta :${port}`);
 
   // Loop de polling
   setInterval(() => {
-    pollOnce().catch(err => console.error("[processor] poll error:", err));
+    pollOnce().catch(err => console.error("[processor] erro no polling:", err));
   }, POLL_SECONDS * 1000);
 });

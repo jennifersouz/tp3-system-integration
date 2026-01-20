@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package xmlservice;
+
+option go_package = "xmlservice/pb;pb";
+
+service BIService {
+  rpc SalesByCategory(CategoryRequest) returns (CategoryResponse);
+}
+
+message CategoryRequest {
+  string category = 1;
+}
+
+message CategoryResponse {
+  string category = 1;
+  double total = 2;
+}
