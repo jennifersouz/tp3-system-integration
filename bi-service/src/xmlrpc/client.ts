@@ -8,7 +8,7 @@ export function profitByRegionXmlRpc(region: string): Promise<number> {
   return new Promise((resolve, reject) => {
     client.methodCall(
       "XMLRPCServer.ProfitByRegion",
-      [{ region }],
+      [region],
       (err: any, value: any) => {
         if (err) {
           console.error("[xmlrpc] error:", err);

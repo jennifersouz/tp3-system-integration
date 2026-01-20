@@ -11,3 +11,10 @@ env/
 
 # Build outputs
 dist/
+*.o
+*.so
+*.a
+.DS_Store
+
+# testes
+testes/

@@ -62,7 +62,7 @@ services:
     build: ./bi-service
     environment:
       XML_GRPC_HOST: "xml-service:50051"
-      XML_RPC_URL: "http://xml-service:8099/"
+      XML_RPC_URL: "http://xml-service:8099/RPC2"
     ports:
       - "8082:8082"
     depends_on:
