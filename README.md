@@ -77,42 +77,8 @@ docker compose up -d
 ├── xml-service/      # Go - Serviço XML/gRPC
 ├── bi-service/       # Node.js - GraphQL
 ├── external-api/     # Python - XML-RPC
-```
-┌─────────────┐
-│   Crawler   │ (Python)
-│   S3 API    │
-└──────┬──────┘
-       │ CSV
-       ▼
-┌─────────────┐      ┌────────────────┐
-│  Processor  │─────▶│ External-API   │
-│(TypeScript) │ REST │    (Python)    │
-└──────┬──────┘      └────────────────┘
-       │ Multipart-Form
-       │ + CSV + Webhook URL
-       ▼
-┌─────────────────────────────────┐
-│     XML-Service (Go)            │
-│ ┌─────────────────────────────┐ │
-│ │ REST (XPath Queries)        │ │
-│ │ gRPC (SalesByCategory)      │ │
-│ │ XML-RPC (ProfitByRegion)    │ │
-│ └─────────────────────────────┘ │
-└──────────┬──────────────────────┘
-           │ XML + Webhook
-           ▼
-    ┌──────────────────┐
-    │   PostgreSQL     │
-    │  (XML Storage)   │
-    └──────────────────┘
-           ▲
-           │ gRPC/XML-RPC
-           │
-┌─────────────────┐
-│  BI-Service     │
-│  (Node.js)      │
-│  GraphQL        │
-└─────────────────┘
+
+![Arquitetura do Sistema](tp3.jpeg)
 ```
 
 ### 2.2 Componentes
