@@ -78,9 +78,7 @@ docker compose up -d
 ├── bi-service/       # Node.js - GraphQL
 ├── external-api/     # Python - XML-RPC
 
-<p align="center">
-  <img src="docs/tp3.jpeg" alt="Arquitetura do Sistema" width="700">
-</p>
+![Arquitetura do Sistema](./docs/tp3.png)
 ```
 
 ### 2.2 Componentes
